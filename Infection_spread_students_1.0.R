@@ -6,6 +6,15 @@ random_absence <- 0.05
 lectures <- 1 #per week
 initial_prob=0.1
 
+#### make a dataframe
+health <- data.frame(
+  individual = 1:25,
+  infection_status = 0,
+  location = 0,
+  missed_days = 0, 
+  past_affections = 0, 
+  immunity = 0)
+
 ##### built the class room
 nrows <- 5 
 ncols <- 6
@@ -17,14 +26,6 @@ health$location <- sample(seats$ID, students, replace=FALSE)
 health$row <- seats$rows[health$location]
 health$col <- seats$cols[health$location]
 
-#### make a dataframe
-health <- data.frame(
-  individual = 1:25,
-  infection_status = 0,
-  location = 0,
-  missed_days = 0, 
-  past_affections = 0, 
-  immunity = 0)
 
 # calculate the starting number of infected students 
 exp_infection_at_start <- round(students * beta)
@@ -34,4 +35,21 @@ health$infection_status[sample(1:students, exp_infection_at_start)] <- 1
 
 # assign starting location with random abscenses
 health$location[sample(1:students, round(students * random_absence))] <- 1
+
+#### function to calculate infection probability
+infection_prob <- function() {
+  individual_prop <- c()
+  for (seat in health$location) {
+    for (i in 1:dist)
+    if (seat-(ncols + 1) %in% health$infection_status) {
+      infection_prob=c(infection_prob, prob_diagonal)
+    }
+    if (seat - ncols %in% health$infection_status) {
+      infection_prob=c(infection_prob, prob_diagonal)
+    }
+    if (seat - (ncol - 1) %in% health$infection_status) {
+      infection_prob=c(infection_prob, prob_diagonal)
+    }
+  }
+}
 
