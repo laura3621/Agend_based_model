@@ -1,3 +1,14 @@
+#######
+### 1. Determine Parameters
+### 2. Build a classroom and create "seat dataframe"
+### 3. Make a dataframe of students, contains health status and attendance of all students
+### 4. Randomly assign seats for each students
+### 5. Calculate probability of infection for each students
+### 6. From the probabilities, determine which student get infected
+### 7. Loop multiple times and track infection status each round
+
+
+
 #### set some variables
 beta <- 0.3
 students <- 25
@@ -6,7 +17,14 @@ random_absence <- 0.05
 lectures <- 1 #per week
 initial_prob=0.1
 
-#### make a dataframe
+##### build the class room
+nrows <- 5 
+ncols <- 6
+seats <- expand.grid(rows=1:nrows, cols=1:ncols) 
+seats$ID <- 1:nrow(seats)
+health$location <- sample(seats$ID, students, replace=FALSE)
+
+#### make a dataframe - students
 health <- data.frame(
   individual = 1:25,
   infection_status = 0,
@@ -15,12 +33,6 @@ health <- data.frame(
   past_affections = 0, 
   immunity = 0)
 
-##### built the class room
-nrows <- 5 
-ncols <- 6
-seats <- expand.grid(rows=1:nrows, cols=1:ncols) 
-seats$ID <- 1:nrow(seats)
-health$location <- sample(seats$ID, students, replace=FALSE)
 
 # assign students to seats
 health$row <- seats$rows[health$location]
