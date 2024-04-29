@@ -12,4 +12,5 @@ get_transmissable_distance=function(transmission_rate, threshold){
   return(i)
 }
 
-distance=get_transmissable_distance(beta, threshold = 0.01)
+for(i in 1:nrow()){
+  distance=get_transmissable_distance(beta, threshold = 0.01)
