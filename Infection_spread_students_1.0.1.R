@@ -40,7 +40,8 @@ rounds <- lectures_per_week*weeks
 meta=data.frame(
   infected = rep(NA, rounds),
   immunity = NA,
-  recovering = NA
+  recovering = NA,
+  sick_but_going = NA
 )
 
 
@@ -54,7 +55,7 @@ seats$ID <- 1:nrow(seats)
 health <- data.frame(
   ID = 1:25,
   infected_pre = 0,
-  attendance = 0,
+  absence = 0,
   location = 0,
   missed_rounds = 0, 
   past_affections = 0,
@@ -67,12 +68,12 @@ for(round in 1:rounds){
   #### 4. Randomly assign seats for attending students
   # 4a. get absent students
   ## making voluntary decision not to come..
-  health$attendance <- sample(0:1, students, replace = TRUE, prob = c(1-random_absence, random_absence))
+  health$absence <- sample(0:1, students, replace = TRUE, prob = c(1-random_absence, random_absence))
   ## cannot come anyway due to infection
-  health$attendance[which(health$missed_rounds>=1)] <- 1
+  health$absence[which(health$missed_rounds>=1)] <- 1
   
   # 4b. assign seats to attending students
-  attending_students <- which(health$attendance==0)
+  attending_students <- which(health$absence==0)
   health$location[attending_students]=sample(1:nrow(seats), length(attending_students), replace = FALSE)
   
   
@@ -84,8 +85,9 @@ for(round in 1:rounds){
   # 5b. calculate probability of infection for each students
   #### temporary function and loop to test
   infected_seats=which(health$infected_pre==1)
-  p_vector=c()
+  
   get_infection_probability=function(beta, seat, infected_seats){
+    p_vector=c()
     if(seat-ncols %in% infected_seats){
       p_vector=c(p_vector, beta)
     }
@@ -105,7 +107,7 @@ for(round in 1:rounds){
       seat=health$location[student]
       health$p[student]=get_infection_probability(beta, seat, infected_seats)
     }
-
+    
   }
   #### function to calculate infection probability
   ## didn't touch except variable name - hw
@@ -145,9 +147,10 @@ for(round in 1:rounds){
   
   ### 7. Loop multiple times and track infection status each round
   # 7a. update infection status for each round in meta sheet
-  meta$infected[round] <- sum(health$infected_post)
+  meta$infected[round] <- sum(health$infected_post)-sum(health$infected_pre)
   meta$immunity[round] <- sum(health$immunity)
   meta$recovering[round] <- length(which(health$missed_rounds>=1))
+  meta$sick_but_going[round] <- length(which(health$missed_rounds>=1))
   
   #7b. update "health" dataframe
   quarantine <- which(health$sick_but_going==lectures_per_week)
