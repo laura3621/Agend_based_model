@@ -1,4 +1,5 @@
 #######
+### 0. Retrieve functions
 ### 1. Determine Parameters
 #### a. number of students
 #### b. number of seats and rows
@@ -13,13 +14,12 @@
 #### a. get attendance status for each students
 #### b. assign seats to attending students
 ### 5. Calculate probability of infection for each students
-#### a. students getting an infection without contact
-#### b. get attendance: students in their recovery period + random absence
-#### c. calculate probability of infection for each students
 ### 6. From the probabilities, determine which student get infected
 ### 7. Loop multiple times and track infection status each round
 
-
+#### 0. Retrieve functions
+source("get_transmissable_distance.R")
+source("probability_to_binary.R")
 
 #### 1. Determine Parameters
 beta <- 0.3
@@ -58,7 +58,7 @@ exp_infection_at_start <- round(students * beta)
 # assign 1 to infection_status column for infected students
 health$infection_status[sample(1:students, exp_infection_at_start)] <- 1
 
-#### Can we combine line 52~56 as health$infection_status=sample(0:1, students, replace = TRUE, prob=c(1-initial_prob,initial_prob))?
+#### Can we combine above two lines as health$infection_status=sample(0:1, students, replace = TRUE, prob=c(1-initial_prob,initial_prob))?
 
 #### 4. Randomly assign seats for attending students
 # 4a. get absent students
@@ -73,21 +73,36 @@ health$location[attending_students]=sample(1:nrow(seats), length(attending_stude
 
 health$location[sample(1:students, round(students * random_absence))] <- 1
 
+### 5. Calculate probability of infection for each students
 
 #### function to calculate infection probability
+## didn't touch except variable name 
 infection_prob <- function() {
-  individual_prop <- c()
+  individual_prob <- c()
   for (seat in health$location) {
     for (i in 1:dist)
     if (seat-(ncols + 1) %in% health$infection_status) {
-      infection_prob=c(infection_prob, prob_diagonal)
+      individual_prob=c(individual_prob, prob_diagonal)
     }
     if (seat - ncols %in% health$infection_status) {
-      infection_prob=c(infection_prob, prob_diagonal)
+      individual_prob=c(individual_prob, prob_diagonal)
     }
     if (seat - (ncol - 1) %in% health$infection_status) {
-      infection_prob=c(infection_prob, prob_diagonal)
+      individual_prob=c(individual_prob, prob_diagonal)
     }
   }
 }
+
+
+# temporary probability to test 
+health$p[attending_students]=sample(0:100, length(attending_students), replace = TRUE)/100
+
+
+### 6. From the probabilities, determine which student get infected
+health$infected=rep(NA, nrow(health))
+for(i in 1:nrow(health)){
+  health$infected[i]=probability_to_binary(health$p[i])
+  
+}
+
 
