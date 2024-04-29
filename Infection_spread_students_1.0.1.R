@@ -27,13 +27,13 @@ source("get_transmissable_distance.R")
 source("probability_to_binary.R")
 
 #### 1. Determine Parameters
-beta <- 0.7
+beta <- 0.3
 students <- 25
 transmission_dist <- get_transmissable_distance(beta, threshold = 0.01) #in meters
 random_absence <- 0.05
-lectures_per_week <- 2 #per week
-weeks <- 5
-initial_prob <- 0.3
+lectures_per_week <- 1 #per week
+weeks <- 15
+initial_prob <- 0.1
 rounds <- lectures_per_week*weeks
 
 # create metasheet
@@ -101,8 +101,11 @@ for(round in 1:rounds){
     return(p)
   }
   for(student in attending_students){
-    seat=health$location[student]
-    health$p[student]=get_infection_probability(beta, seat, infected_seats)
+    if(health$immunity[student]==0){
+      seat=health$location[student]
+      health$p[student]=get_infection_probability(beta, seat, infected_seats)
+    }
+
   }
   #### function to calculate infection probability
   ## didn't touch except variable name - hw
@@ -136,7 +139,7 @@ for(round in 1:rounds){
     else{
       health$infected_post[i]<-probability_to_binary(health$p[i])
     }
-      
+    
     
   }
   
@@ -147,10 +150,9 @@ for(round in 1:rounds){
   meta$recovering[round] <- length(which(health$missed_rounds>=1))
   
   #7b. update "health" dataframe
-  quarantine <- which(health$sick_but_going==lectures_per_week-1)
-  back_to_school <- which(health$missed_rounds==lectures_per_week-1)
+  quarantine <- which(health$sick_but_going==lectures_per_week)
+  back_to_school <- which(health$missed_rounds==lectures_per_week)
   #clear infection status of students in quarantine
-  health$infected_pre[quarantine] <- 0
   health$sick_but_going[quarantine] <- 0
   health$infected_post[quarantine] <-0
   #count missed rounds of students in quarantine
@@ -158,6 +160,7 @@ for(round in 1:rounds){
   #get students back to class + immunity
   health$missed_rounds[back_to_school] <- 0
   health$immunity[back_to_school] <- 1
+  health$infected_pre[back_to_school] <- 0
   #add counts for students who got sick and still goes to school
   health$sick_but_going[which(health$infected_post==1)] <-health$sick_but_going[which(health$infected_post==1)] +1
   #transfer infected_post as infect_pre of next round
@@ -168,9 +171,8 @@ for(round in 1:rounds){
   health$p <- 0
   health$infected_post <- 0
   
-
+  
   print(back_to_school)
   print(meta)
-
+  
 }
-
