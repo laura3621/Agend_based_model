@@ -1,9 +1,19 @@
 #######
 ### 1. Determine Parameters
+#### a. number of students
+#### b. number of seats and rows
+#### c. transmission rate
+#### d. recovery period
+#### e. random absence rate
+#### f. lectures per week
+#### g. probability of getting an infection without contact
 ### 2. Build a classroom and create "seat dataframe"
 ### 3. Make a dataframe of students, contains health status and attendance of all students
 ### 4. Randomly assign seats for each students
 ### 5. Calculate probability of infection for each students
+#### a. students getting an infection without contact
+#### b. get attendance: students in their recovery period + random absence
+#### c. calculate probability of infection for each students
 ### 6. From the probabilities, determine which student get infected
 ### 7. Loop multiple times and track infection status each round
 
