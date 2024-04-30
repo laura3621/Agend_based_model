@@ -16,6 +16,8 @@
 ### 5. Calculate probability of infection for each students
 ### 6. From the probabilities, determine which student get infected
 ### 7. Loop multiple times and track infection status each round
+#### a. update infection status for each round in meta sheet (?)
+#### b. update "health" dataframe
 
 #### 0. Retrieve functions
 source("get_transmissable_distance.R")
@@ -54,7 +56,6 @@ health$col <- seats$cols[health$location]
 
 # calculate the starting number of infected students 
 exp_infection_at_start <- round(students * beta)
-
 # assign 1 to infection_status column for infected students
 health$infection_status[sample(1:students, exp_infection_at_start)] <- 1
 
@@ -65,18 +66,19 @@ health$infection_status[sample(1:students, exp_infection_at_start)] <- 1
 ## making voluntary decision not to come..
 health$attendance <- sample(0:1, students, replace = TRUE, prob = c(1-random_absence, random_absence))
 ## cannot come anyway due to infection
-health$attendance[which(health$missed_days>1)] <- 1
+health$attendance[which(health$missed_days>=1 & health$missed_days<=7)] <- 1
 
 # 4b. assign seats to attending students
 attending_students <- which(health$attendance==0)
 health$location[attending_students]=sample(1:nrow(seats), length(attending_students), replace = FALSE)
 
-health$location[sample(1:students, round(students * random_absence))] <- 1
+#health$location[sample(1:students, round(students * random_absence))] <- 1
+#I temporarily commented out this line to test the code -hw
 
 ### 5. Calculate probability of infection for each students
 
 #### function to calculate infection probability
-## didn't touch except variable name 
+## didn't touch except variable name - hw
 infection_prob <- function() {
   individual_prob <- c()
   for (seat in health$location) {
@@ -104,5 +106,6 @@ for(i in 1:nrow(health)){
   health$infected[i]=probability_to_binary(health$p[i])
   
 }
+
 
 
