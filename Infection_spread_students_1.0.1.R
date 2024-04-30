@@ -53,14 +53,14 @@ seats$ID <- 1:nrow(seats)
 
 #### 3. Make a dataframe that contains student information
 health <- data.frame(
-  ID = 1:25,
+  ID = 1:students,
   infected_pre = 0,
   absence = 0,
   location = 0,
   missed_rounds = 0, 
-  past_affections = 0,
-  p = 0,
-  infection_post = 0,
+  past_affections = 0, 
+  p = 0, #probability of getting infected
+  infection_post = 0, #infection status after this round
   immunity = 0,
   sick_but_going = 0)
 
