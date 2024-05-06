@@ -57,6 +57,8 @@ health <- data.frame(
   infected_pre = 0,
   absence = 0,
   location = 0,
+  row=0,
+  col=0,
   missed_rounds = 0, 
   past_affections = 0, 
   p = 0, #probability of getting infected
@@ -75,6 +77,8 @@ for(round in 1:rounds){
   # 4b. assign seats to attending students
   attending_students <- which(health$absence==0)
   health$location[attending_students]=sample(1:nrow(seats), length(attending_students), replace = FALSE)
+  health$row[attending_students]=seats$rows[health$location]
+  health$col[attending_students]=seats$cols[health$location]
   
   
   ### 5. Calculate probability of infection for each students
@@ -82,65 +86,24 @@ for(round in 1:rounds){
   possible_hosts=which(health$immunity == 0)
   health$infected_pre[possible_hosts]=sample(0:1, length(possible_hosts), replace = TRUE, prob=c(1-initial_prob,initial_prob))
   
+  
   # 5b. calculate probability of infection for each students
-  #### temporary function and loop to test
-  infected_seats=which(health$infected_pre==1)
-  
-  get_infection_probability=function(beta, seat, infected_seats){
-    p_vector=c()
-    if(seat-ncols %in% infected_seats){
-      p_vector=c(p_vector, beta)
-    }
-    if(seat+ncols %in% infected_seats){
-      p_vector=c(p_vector, beta)
-    }
-    # get p from p_vector
-    product=1
-    for(prob in p_vector){
-      product=product*(1-prob)
-    }
-    p=1-product
-    return(p)
-  }
-  for(student in attending_students){
-    if(health$immunity[student]==0){
-      seat=health$location[student]
-      health$p[student]=get_infection_probability(beta, seat, infected_seats)
-    }
-    
-  }
-  #### function to calculate infection probability
-  ## didn't touch except variable name - hw
-  # infection_prob <- function() {
-  #   individual_prob <- c()
-  #   for (seat in health$location) {
-  #     for (i in 1:dist)
-  #       if (seat-(ncols + 1) %in% health$infected_pre) {
-  #         individual_prob=c(individual_prob, prob_diagonal)
-  #       }
-  #     if (seat - ncols %in% health$infected_pre) {
-  #       individual_prob=c(individual_prob, prob_diagonal)
-  #     }
-  #     if (seat - (ncol - 1) %in% health$infected_pre) {
-  #       individual_prob=c(individual_prob, prob_diagonal)
-  #     }
-  #   }
-  # }
-  # 
-  # 
-  # temporary probability to test 
-  # health$p[attending_students]<-sample(0:100, length(attending_students), replace = TRUE)/100
-  
+  #distance matrix for all seats
+  distances <- as.matrix(dist(cbind(health$row,health$col)))
+  distances <- distances[,which(health$infected_pre==1), drop=FALSE]
+  #get number of exposures for each students
+  health$exposures<-rowSums(distances<=transmission_dist)
+  #get probability of infection by number of exposures
+  health$p=1-(1-beta)^health$exposures
   
   ### 6. From the probabilities, determine which student get infected
-  health$infected_post<-rep(0, nrow(health))
+  #health$infected_post<-rep(0, nrow(health))
   for(i in 1:nrow(health)){
-    if(health$infected_pre[i] == 1){
-      health$infected_post[i] == 1
-    }
-    else{
+    if(health$immunity[i] == 1){
+      health$infected_post[i] == 0
+    } else{
       health$infected_post[i]<-probability_to_binary(health$p[i])
-    }
+      }
     
     
   }
