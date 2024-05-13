@@ -21,6 +21,7 @@
 ### 7. Loop multiple times and track infection status each round
 #### a. update infection status for each round in meta sheet (?)
 #### b. update "health" dataframe
+rm(list=ls())
 
 #### 0. Retrieve functions
 source("get_transmissable_distance.R")
@@ -28,12 +29,12 @@ source("probability_to_binary.R")
 
 #### 1. Determine Parameters
 beta <- 0.3
-students <- 25
-transmission_dist <- get_transmissable_distance(beta, threshold = 0.01) #in meters
+students <- 100
+transmission_dist <- 2 #in number of seats between students
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
-weeks <- 15
-initial_prob <- 0.1
+weeks <- 100 #fix in the end to 18 weeks -> one semester + study phase
+initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
 
 # create metasheet
@@ -46,8 +47,8 @@ meta=data.frame(
 
 
 #### 2. Build the class room - dataframe$ rows, columns, ID
-nrows <- 5 
-ncols <- 6
+nrows <- 10 
+ncols <- 12
 seats <- expand.grid(rows=1:nrows, cols=1:ncols) 
 seats$ID <- 1:nrow(seats)
 
@@ -110,7 +111,7 @@ for(round in 1:rounds){
   
   ### 7. Loop multiple times and track infection status each round
   # 7a. update infection status for each round in meta sheet
-  meta$infected[round] <- sum(health$infected_post)-sum(health$infected_pre)
+  meta$infected[round] <- sum(health$infected_post)
   meta$immunity[round] <- sum(health$immunity)
   meta$recovering[round] <- length(which(health$missed_rounds>=1))
   meta$sick_but_going[round] <- length(which(health$missed_rounds>=1))
@@ -142,3 +143,6 @@ for(round in 1:rounds){
   print(meta)
   
 }
+
+
+
