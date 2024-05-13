@@ -23,7 +23,11 @@
 #### b. update "health" dataframe
 rm(list=ls())
 
-#### 0. Retrieve functions
+
+#### 0. Retrieve functions, set working directory
+setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+rm(list=ls())
+
 source("get_transmissable_distance.R")
 source("probability_to_binary.R")
 
@@ -34,6 +38,10 @@ transmission_dist <- 2 #in number of seats between students
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
 weeks <- 100 #fix in the end to 18 weeks -> one semester + study phase
+transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist 1 = one seat(60cm)
+random_absence <- 0.05
+lectures_per_week <- 1 #per week
+weeks <- 30
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
 
@@ -86,6 +94,7 @@ for(round in 1:rounds){
   # 5a. get students(who are not immune)who got infected outside of class
   possible_hosts=which(health$immunity == 0)
   health$infected_pre[possible_hosts]=sample(0:1, length(possible_hosts), replace = TRUE, prob=c(1-initial_prob,initial_prob))
+  health$immunity[which(health$infected_pre ==1)]=1
   
   
   # 5b. calculate probability of infection for each students
@@ -105,8 +114,6 @@ for(round in 1:rounds){
     } else{
       health$infected_post[i]<-probability_to_binary(health$p[i])
       }
-    
-    
   }
   
   ### 7. Loop multiple times and track infection status each round
@@ -118,10 +125,12 @@ for(round in 1:rounds){
   
   #7b. update "health" dataframe
   quarantine <- which(health$sick_but_going==lectures_per_week)
+  print(quarantine)
   back_to_school <- which(health$missed_rounds==lectures_per_week)
+  print(back_to_school)
   #clear infection status of students in quarantine
   health$sick_but_going[quarantine] <- 0
-  health$infected_post[quarantine] <-0
+  health$infected_post[quarantine] <- 0
   #count missed rounds of students in quarantine
   health$missed_rounds[quarantine] <- health$missed_rounds[quarantine]+1
   #get students back to class + immunity
