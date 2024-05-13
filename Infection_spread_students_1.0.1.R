@@ -21,6 +21,7 @@
 ### 7. Loop multiple times and track infection status each round
 #### a. update infection status for each round in meta sheet (?)
 #### b. update "health" dataframe
+rm(list=ls())
 
 
 #### 0. Retrieve functions, set working directory
@@ -33,6 +34,10 @@ source("probability_to_binary.R")
 #### 1. Determine Parameters
 beta <- 0.3
 students <- 100
+transmission_dist <- 2 #in number of seats between students
+random_absence <- 0.05
+lectures_per_week <- 1 #per week
+weeks <- 100 #fix in the end to 18 weeks -> one semester + study phase
 transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist 1 = one seat(60cm)
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
@@ -147,3 +152,6 @@ for(round in 1:rounds){
   print(meta)
   
 }
+
+
+
