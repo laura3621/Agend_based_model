@@ -226,10 +226,11 @@ max_means=colMeans(max_values_df)
 max_sd=apply(max_values_df, 1, sd)
 
 
-plot(colMeans(max_values_df))
-cost=c(1:11)
-cost=log(cost)
-plot(cost, type = "l")
+boxplot(max_value_df, 
+        main = "Boxplots for Each Condition", 
+        xlab = "Variable", 
+        ylab = "Value", 
+        col = "lightblue")
 
 
 
