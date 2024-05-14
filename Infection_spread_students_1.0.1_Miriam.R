@@ -23,28 +23,39 @@
 #### b. update "health" dataframe
 rm(list=ls())
 
-#setwd("/Users/MiriamBinder/Documents/GitHub/Agend_based_model")
 
 #### 0. Retrieve functions, set working directory
+setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+setwd("~/Documents/GitHub/Agend_based_model") #Miriam
+rm(list=ls())
+
 source("get_transmissable_distance.R")
 source("probability_to_binary.R")
 
 #### 1. Determine Parameters
 beta <- 0.3
 students <- 100
+transmission_dist <- 2 #in number of seats between students
+random_absence <- 0.05
+lectures_per_week <- 1 #per week
+weeks <- 100 #fix in the end to 18 weeks -> one semester + study phase
 transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist 1 = one seat(60cm)
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
-weeks <- 18
+weeks <- 30
+weeks_for_mean <- 13
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
+mean_stored <-  0
+weekday_mean <- 0
 
 # create metasheet
 meta=data.frame(
   infected = rep(NA, rounds),
   immunity = NA,
   recovering = NA,
-  sick_but_going = NA
+  sick_but_going = NA,
+  mean_stored = NA
 )
 
 
@@ -69,7 +80,9 @@ health <- data.frame(
   immunity = 0,
   sick_but_going = 0)
 
+
 for(round in 1:rounds){
+  
   #### 4. Randomly assign seats for attending students
   # 4a. get absent students
   ## making voluntary decision not to come..
@@ -107,7 +120,7 @@ for(round in 1:rounds){
       health$infected_post[i] == 0
     } else{
       health$infected_post[i]<-probability_to_binary(health$p[i])
-    }
+      }
   }
   
   ### 7. Loop multiple times and track infection status each round
@@ -115,7 +128,7 @@ for(round in 1:rounds){
   meta$infected[round] <- sum(health$infected_post)
   meta$immunity[round] <- sum(health$immunity)
   meta$recovering[round] <- length(which(health$missed_rounds>=1))
-  meta$sick_but_going[round] <- length(which(health$missed_rounds>=1))
+  meta$sick_but_going[round] <- length(which(health$sick_but_going>=1))
   
   #7b. update "health" dataframe
   quarantine <- which(health$sick_but_going==lectures_per_week)
@@ -140,10 +153,25 @@ for(round in 1:rounds){
   health$location <- 0
   health$p <- 0
   health$infected_post <- 0
+
   
-  print(back_to_school)
-  print(meta)
+  # mean for the defined weeks (now 13 weeks)
+  if(round <= weeks_for_mean) {
+    meta$infected_stored[round] <- meta$infected[round]
+  } else {
+    meta$infected_stored[round] <- 0
+  }
   
+  
+  
+  
+  # print(back_to_school)
+  # print(meta)
+  # 
 }
 
-ggplot2(aes(x=infected, y = week))
+mean_one_simulation <- sum(meta$infected_stored)/weeks_for_mean
+
+
+
+
