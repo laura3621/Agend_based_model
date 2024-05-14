@@ -234,7 +234,7 @@ boxplot(max_values_df,
         main = "Boxplots for each Condition", 
         xlab = "Classroom Size", 
         ylab = "Highest nr. of infected Individuals per Condition", 
-        col = "lightblue")
+        col = "lightpink")
 
 
 
