@@ -43,11 +43,12 @@ transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
 weeks <- 30
-weeks_for_mean <- 13
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
-mean_stored <-  0
 weekday_mean <- 0
+weeks_for_mean <- 13
+highest_new <- 0
+lowest_new <- Inf
 
 # create metasheet
 meta=data.frame(
@@ -55,7 +56,7 @@ meta=data.frame(
   immunity = NA,
   recovering = NA,
   sick_but_going = NA,
-  mean_stored = NA
+  infected_stored = NA
 )
 
 
@@ -79,6 +80,7 @@ health <- data.frame(
   infection_post = 0, #infection status after this round
   immunity = 0,
   sick_but_going = 0)
+
 
 
 for(round in 1:rounds){
@@ -120,7 +122,7 @@ for(round in 1:rounds){
       health$infected_post[i] == 0
     } else{
       health$infected_post[i]<-probability_to_binary(health$p[i])
-      }
+    }
   }
   
   ### 7. Loop multiple times and track infection status each round
@@ -153,25 +155,36 @@ for(round in 1:rounds){
   health$location <- 0
   health$p <- 0
   health$infected_post <- 0
-
+  
   
   # mean for the defined weeks (now 13 weeks)
   if(round <= weeks_for_mean) {
     meta$infected_stored[round] <- meta$infected[round]
+    
+    # finding highest value of infected in one simulation
+    highest <- meta$infected[round]
+    #store highest and lowest value
+    if(highest_new < highest) {
+      highest_new <-  highest
+    }
+    
+    # finding lowest value of infected in one simulation
+    lowest <- meta$infected[round]
+    #store highest and lowest value
+    if(lowest_new > lowest && lowest != 0) {
+      lowest_new <-  lowest
+    }
+    
   } else {
     meta$infected_stored[round] <- 0
   }
   
+  print(back_to_school)
+  print(meta)
   
-  
-  
-  # print(back_to_school)
-  # print(meta)
-  # 
 }
 
-mean_one_simulation <- sum(meta$infected_stored)/weeks_for_mean
-
-
-
+mean_13weeks <- sum(meta$infected_stored)/weeks_for_mean
+highest_new
+lowest_new
 
