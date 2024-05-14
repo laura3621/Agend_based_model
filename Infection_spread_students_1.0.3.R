@@ -25,7 +25,9 @@ rm(list=ls())
 
 
 #### 0. Retrieve functions, set working directory
-setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+#setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/")
+
 rm(list=ls())
 
 source("get_transmissable_distance.R")
@@ -34,7 +36,7 @@ source("probability_to_binary.R")
 #### 1. Determine Parameters
 beta <- 0.3
 students <- 100
-transmission_dist <- 2 #in number of seats between students
+transmission_dist <- 1.5 #in number of seats between students
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
 weeks <- 13 #fix in the end to 18 weeks -> one semester + study phase
@@ -225,11 +227,13 @@ for(j in nrows) {
 max_means=colMeans(max_values_df)
 max_sd=apply(max_values_df, 1, sd)
 
+# change the column names of max_values 
+colnames(max_values_df) <- c("10x10", "11x11", "12x12", "13x13", "14x14", "15x15", "16x16", "17x17", "18x18", "19x19", "20x20")
 
-boxplot(max_value_df, 
-        main = "Boxplots for Each Condition", 
-        xlab = "Variable", 
-        ylab = "Value", 
+boxplot(max_values_df, 
+        main = "Boxplots for each Condition", 
+        xlab = "Classroom Size", 
+        ylab = "Highest nr. of infected Individuals per Condition", 
         col = "lightblue")
 
 
