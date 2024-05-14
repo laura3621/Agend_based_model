@@ -25,7 +25,6 @@ rm(list=ls())
 
 
 #### 0. Retrieve functions, set working directory
-setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/")
 setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
 setwd("~/Documents/GitHub/Agend_based_model") #Miriam
 rm(list=ls())
@@ -36,19 +35,19 @@ source("probability_to_binary.R")
 #### 1. Determine Parameters
 beta <- 0.3
 students <- 100
-transmission_dist <- 1 #in number of seats between students
+transmission_dist <- 2 #in number of seats between students
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
-weeks <- 13 #fix in the end to 18 weeks -> one semester + study phase
+weeks <- 100 #fix in the end to 18 weeks -> one semester + study phase
 transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist 1 = one seat(60cm)
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
+weeks <- 30
+weeks_for_mean <- 13
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
+mean_stored <-  0
 weekday_mean <- 0
-weeks_for_mean <- 13
-highest_new <- 0
-lowest_new <- Inf
 
 # create metasheet
 meta=data.frame(
@@ -56,7 +55,7 @@ meta=data.frame(
   immunity = NA,
   recovering = NA,
   sick_but_going = NA,
-  infected_stored = NA
+  mean_stored = NA
 )
 
 
@@ -82,9 +81,8 @@ health <- data.frame(
   sick_but_going = 0)
 
 
-
 for(round in 1:rounds){
-
+  
   #### 4. Randomly assign seats for attending students
   # 4a. get absent students
   ## making voluntary decision not to come..
@@ -160,54 +158,20 @@ for(round in 1:rounds){
   # mean for the defined weeks (now 13 weeks)
   if(round <= weeks_for_mean) {
     meta$infected_stored[round] <- meta$infected[round]
-    
-    # finding highest value of infected in one simulation
-    highest <- meta$infected[round]
-    #store highest and lowest value
-    if(highest_new < highest) {
-      highest_new <-  highest
-    }
-    
-    # finding lowest value of infected in one simulation
-    lowest <- meta$infected[round]
-    #store highest and lowest value
-    if(lowest_new > lowest && lowest != 0) {
-      lowest_new <-  lowest
-    }
-    
   } else {
     meta$infected_stored[round] <- 0
   }
   
   
-  print(back_to_school)
-  print(meta)
   
+  
+  # print(back_to_school)
+  # print(meta)
+  # 
 }
 
-mean_13weeks <- sum(meta$infected_stored)/weeks_for_mean
-highest_new
-lowest_new
+mean_one_simulation <- sum(meta$infected_stored)/weeks_for_mean
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-for (w in weeks) {
-  mean_infected$w <- meta[1, w]
-}
-mean_infected$week1 <- meta$infected[1]
-
-meta[1,1]
 
