@@ -25,7 +25,7 @@ rm(list=ls())
 
 
 #### 0. Retrieve functions, set working directory
-setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/")
 rm(list=ls())
 
 source("get_transmissable_distance.R")
@@ -34,14 +34,13 @@ source("probability_to_binary.R")
 #### 1. Determine Parameters
 beta <- 0.3
 students <- 100
-transmission_dist <- 2 #in number of seats between students
+transmission_dist <- 1 #in number of seats between students
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
-weeks <- 100 #fix in the end to 18 weeks -> one semester + study phase
+weeks <- 13 #fix in the end to 18 weeks -> one semester + study phase
 transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist 1 = one seat(60cm)
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
-weeks <- 30
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
 
@@ -121,7 +120,7 @@ for(round in 1:rounds){
   meta$infected[round] <- sum(health$infected_post)
   meta$immunity[round] <- sum(health$immunity)
   meta$recovering[round] <- length(which(health$missed_rounds>=1))
-  meta$sick_but_going[round] <- length(which(health$missed_rounds>=1))
+  meta$sick_but_going[round] <- length(which(health$sick_but_going>=1))
   
   #7b. update "health" dataframe
   quarantine <- which(health$sick_but_going==lectures_per_week)
@@ -154,4 +153,24 @@ for(round in 1:rounds){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+for (w in weeks) {
+  mean_infected$w <- meta[1, w]
+}
+mean_infected$week1 <- meta$infected[1]
+
+meta[1,1]
 
