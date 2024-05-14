@@ -26,6 +26,7 @@ rm(list=ls())
 
 #### 0. Retrieve functions, set working directory
 setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+setwd("~/Documents/GitHub/Agend_based_model") #Miriam
 rm(list=ls())
 
 source("get_transmissable_distance.R")
@@ -226,19 +227,64 @@ max_means=colMeans(max_values_df)
 max_sd=apply(max_values_df, 1, sd)
 
 
-boxplot(max_value_df, 
+boxplot(max_values_df, 
         main = "Boxplots for Each Condition", 
         xlab = "Variable", 
         ylab = "Value", 
         col = "lightblue")
 
+# One plot for both curves
+## values for mean_infected curve
+max_means=colMeans(max_values_df)
+max_sd=apply(max_values_df, 1, sd)
+
+## values for cost
+cost=c(1:11)
+cost = log(cost)
+plot(cost, type='l')
+
+## plots
+plot(max_means, type='l', col='violet', lwd = 2, ylab ='cost')
+par(new = TRUE)
+plot(cost, type='l', col='blue', lwd = 2, axes = FALSE, xlab = '', ylab = '')
+
+# Add the x-axis 
+axis(4, at = 1:11, labels = round(log(1:11), 2), axis.title = 'mean maximum Infected')
+mtext("log(cost)", side = 4, line = 2, col = "blue")
 
 
+# Add legends
+legend(legend = c("Mean Infected", "log(Cost)"), col = c("violet", "blue"), lty = 1, lwd = 2)
+
+# Add a title
+title(main = "Plot of Mean Infected and log(Cost) with Intersection Highlighted")
 
 ##############
 
+# One plot for both curves
+## values for mean_infected curve
+max_means <- colMeans(max_values_df)
+max_sd <- apply(max_values_df, 1, sd)
 
+## values for cost
+extended_range <- 20  # Desired range for the x-axis of the second plot
+cost <- log(seq(1, extended_range))
 
+# Plot the first curve (red)
+plot(max_means, type = 'l', col = 'red', lwd = 2, ylab = 'Mean maximum Infected', col.axis = 'red')
+# Overlay the second curve (blue)
+par(new = TRUE)
+plot(cost, type = 'l', col = 'blue', lwd = 2, axes = FALSE, xlab = '', ylab = '')
 
+# Adjust the x-axis of the second plot
+axis(4, at = 1:11, labels = round(log(1:11), 2), col.axis = "blue", col.ticks = "blue")
+mtext("log(cost)", side = 4, line = 2, col = "blue")
+mtext("Mean Maximum Infected", side = 4, line = 3, col = "red"  # Add y-axis title for axis 4
+
+# Add legends
+legend(legend = c("Mean Infected", "log(Cost)"), col = c("red", "blue"), lty = 1, lwd = 2)
+
+# Add a title
+title(main = "Plot of Mean Infected and log(Cost)")
 
 
