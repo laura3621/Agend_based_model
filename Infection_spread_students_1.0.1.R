@@ -62,7 +62,7 @@ meta=data.frame(
 
 #### 2. Build the class room - dataframe$ rows, columns, ID
 nrows <- 10 
-ncols <- 12
+ncols <- 10
 seats <- expand.grid(rows=1:nrows, cols=1:ncols) 
 seats$ID <- 1:nrow(seats)
 
