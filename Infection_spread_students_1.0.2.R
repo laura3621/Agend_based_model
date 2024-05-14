@@ -25,7 +25,9 @@ rm(list=ls())
 
 
 #### 0. Retrieve functions, set working directory
-setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+#setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/")
+
 rm(list=ls())
 
 source("get_transmissable_distance.R")
@@ -61,8 +63,8 @@ new_meta=function(){
 
 
 #### 2. Build the class room - dataframe$ rows, columns, ID
-nrows <- 10 
-ncols <- 10
+nrows <- 20 
+ncols <- 20
 seats <- expand.grid(rows=1:nrows, cols=1:ncols) 
 seats$ID <- 1:nrow(seats)
 
@@ -185,7 +187,7 @@ one_round=function(nth_round, beta, students, transmission_dist,random_absence,l
 
 
 # make a dataframe to track result in each simulation
-n=1000 #number of simulations
+n=100 #number of simulations
 column_names <- paste("trial", 1:n, sep= "_")
 df <- data.frame(matrix(NA, nrow = rounds, ncol = n))
 
@@ -231,5 +233,20 @@ boxplot(t(df), # box plot
         xlab = "Weeks", 
         ylab = "Infected Students", 
         col = "lightblue")
+
+# make a dataframe with max, min, mean
+values_df <- data.frame(Minimum = min_simulation, Mean = mean_simulation, Maximum = max_simulation)
+
+## plot it
+boxplot(values_df, 
+        main = "Variation for Classroom of Size 20x20", 
+        xlab = "Infected Values", 
+        ylab = "Number of Infected Individuals", 
+        col = "lightyellow", 
+        ylim = c(0,30),
+        cex.axis = 1.0, cex.lab = 1.0, cex.main = 2)
+axis(2, at = seq(0, 30, by = 5))
+
+
 
 
