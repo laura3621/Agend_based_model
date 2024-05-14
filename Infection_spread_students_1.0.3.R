@@ -46,12 +46,8 @@ random_absence <- 0.05
 lectures_per_week <- 1 #per week
 weeks <- 13 #fix in the end to 18 weeks -> one semester + study phase
 transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist 1 = one seat(60cm)
-random_absence <- 0.05
-lectures_per_week <- 1 #per week
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
-mean_stored <-  0
-
 
 # create new metasheet
 new_meta=function(){
@@ -253,14 +249,17 @@ cost = log(cost)
 plot(cost, type='l')
 
 ## plots
-plot(max_means, type='l', col='violet', lwd = 2, ylab ='cost')
+plot(x = 10:20, y = max_means, type = 'l', col = 'violet', lwd = 2, ylab = 'cost', xlab = 'Classroom Size', xaxt = 'n')
+axis(1, at = seq(10, 20, by = 1))
+
+
 par(new = TRUE)
 plot(cost, type='l', col='blue', lwd = 2, axes = FALSE, xlab = '', ylab = '')
+axis(4, at = round(log(1:10), 2), labels = paste0("0.", seq(1, 10), sep = ""), axis.title = 'mean maximum Infected')
 
 # Add the x-axis 
-axis(4, at = 1:11, labels = round(log(1:11), 2), axis.title = 'mean maximum Infected')
-mtext("log(cost)", side = 4, line = 2, col = "blue")
-
+#axis(4, at = 1:11, labels = round(log(1:11), 2), axis.title = 'mean maximum Infected')
+#mtext("log(cost)", side = 4, line = 2, col = "blue")
 
 # Add legends
 legend(legend = c("Mean Infected", "log(Cost)"), col = c("violet", "blue"), lty = 1, lwd = 2)
