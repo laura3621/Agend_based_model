@@ -239,60 +239,40 @@ boxplot(max_values_df,
 
 
 # One plot for both curves
-## values for mean_infected curve
-max_means=colMeans(max_values_df)
-max_sd=apply(max_values_df, 1, sd)
-
-## values for cost
-cost=c(1:11)
-cost = log(cost)
-plot(cost, type='l')
-
-## plots
-plot(x = 10:20, y = max_means, type = 'l', col = 'violet', lwd = 2, ylab = 'cost', xlab = 'Classroom Size', xaxt = 'n')
-axis(1, at = seq(10, 20, by = 1))
-
-
-par(new = TRUE)
-plot(cost, type='l', col='blue', lwd = 2, axes = FALSE, xlab = '', ylab = '')
-axis(4, at = round(log(1:10), 2), labels = paste0("0.", seq(1, 10), sep = ""), axis.title = 'mean maximum Infected')
-
-# Add the x-axis 
-#axis(4, at = 1:11, labels = round(log(1:11), 2), axis.title = 'mean maximum Infected')
-#mtext("log(cost)", side = 4, line = 2, col = "blue")
-
-# Add legends
-legend(legend = c("Mean Infected", "log(Cost)"), col = c("violet", "blue"), lty = 1, lwd = 2)
-
-# Add a title
-title(main = "Plot of Mean Infected and log(Cost) with Intersection Highlighted")
-
-##############
-
-# One plot for both curves
-## values for mean_infected curve
+# max_means and max_sd 
 max_means <- colMeans(max_values_df)
 max_sd <- apply(max_values_df, 1, sd)
 
-## values for cost
-extended_range <- 20  # Desired range for the x-axis of the second plot
-cost <- log(seq(1, extended_range))
+# # Define cost based on classroom size
+# starting_value <- 10000
+# growth_rate <- 1.10
+# classroom <- 10:20
+# # Use growth rate
+# cost <- starting_value * growth_rate^(0:(length(classroom) - 1))
 
-# Plot the first curve (red)
-plot(max_means, type = 'l', col = 'red', lwd = 2, ylab = 'Mean maximum Infected', col.axis = 'red')
-# Overlay the second curve (blue)
+# Define cost based on classroom size using a logarithmic scale
+classroom <- 10:20
+starting_value <- 10000
+# Use a logarithmic function to define the cost
+cost <- starting_value * log(classroom)
+
+# Plot Mean Infected
+plot(x = classroom, y = max_means, type = 'l', col = 'violet', lwd = 2, ylab = 'Mean Infected', xlab = 'Classroom Size', xaxt = 'n')
+axis(1, at = classroom)
+
+# Overlay log(Cost)
 par(new = TRUE)
-plot(cost, type = 'l', col = 'blue', lwd = 2, axes = FALSE, xlab = '', ylab = '')
-
-# Adjust the x-axis of the second plot
-axis(4, at = 1:11, labels = round(log(1:11), 2), col.axis = "blue", col.ticks = "blue")
-mtext("log(cost)", side = 4, line = 2, col = "blue")
-mtext("Mean Maximum Infected", side = 4, line = 3, col = "red" ) # Add y-axis title for axis 4
+plot(x = classroom, y = cost, type = 'l', col = 'blue', lwd = 2, axes = FALSE, xlab = '', ylab = '')
+axis(4) 
+mtext("Cost in CHF", side = 4, line = 2, col = "blue")
 
 # Add legends
-legend(legend = c("Mean Infected", "log(Cost)"), col = c("red", "blue"), lty = 1, lwd = 2)
+legend("topright", legend = c("Mean Infected", "Cost in CHF"), col = c("violet", "blue"), lty = 1, lwd = 2)
 
 # Add a title
-title(main = "Plot of Mean Infected and log(Cost)")
+title(main = "Plot of Mean Infected and Cost in CHF")
+
+##############
+
 
 
