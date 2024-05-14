@@ -118,13 +118,13 @@ one_round=function(nth_round, beta, students, transmission_dist,random_absence,l
   ### 6. From the probabilities, determine which student get infected
   for(i in 1:nrow(health)){
     if(health$immunity[i] == 1){
-      health$infected_post[i] == 0
+      health$infected_post[i] = 0
     } else{
       health$infected_post[i]<-probability_to_binary(health$p[i])
     }
   }
   
-  ### 7. Loop multiple times and track infection status each round
+  ### 7. Loop for each week and track infection status each round
   # 7a. update infection status for each round in meta sheet
   meta$infected[nth_round] <- sum(health$infected_post)
   meta$immunity[nth_round] <- sum(health$immunity)
