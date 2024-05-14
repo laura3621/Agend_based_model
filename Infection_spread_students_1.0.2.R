@@ -25,18 +25,21 @@ rm(list=ls())
 
 
 #### 0. Retrieve functions, set working directory
-setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+#setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/")
+
 rm(list=ls())
 
 source("get_transmissable_distance.R")
 source("probability_to_binary.R")
 
+
 #### 1. Determine Parameters
 beta <- 0.3
 students <- 100
-transmission_dist <- 2 #in number of seats between students
+transmission_dist <- 1.5 #in number of seats between students
 random_absence <- 0.05
-lectures_per_week <- 1 #per week
+lectures_per_week <- 1 #per weeka
 weeks <- 13 #fix in the end to 18 weeks -> one semester + study phase
 transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist 1 = one seat(60cm)
 random_absence <- 0.05
@@ -60,8 +63,8 @@ new_meta=function(){
 
 
 #### 2. Build the class room - dataframe$ rows, columns, ID
-nrows <- 10 
-ncols <- 12
+nrows <- 20 
+ncols <- 20
 seats <- expand.grid(rows=1:nrows, cols=1:ncols) 
 seats$ID <- 1:nrow(seats)
 
@@ -77,7 +80,7 @@ new_health=function(){
     missed_rounds = 0, 
     past_affections = 0, 
     p = 0, #probability of getting infected
-    infection_post = 0, #infection status after this round
+    infected_post = 0, #infection status after this round
     immunity = 0,
     sick_but_going = 0)
   return(health)
@@ -182,11 +185,8 @@ one_round=function(nth_round, beta, students, transmission_dist,random_absence,l
 }
   
 
-###########
-# 
 
 # make a dataframe to track result in each simulation
-
 n=100 #number of simulations
 column_names <- paste("trial", 1:n, sep= "_")
 df <- data.frame(matrix(NA, nrow = rounds, ncol = n))
@@ -197,9 +197,8 @@ colnames(df) <- column_names
 
 ##############
 
-trial_num=100
-mean_simulation=rep(NA, trial_num)
-for(trial in 1:trial_num){
+mean_simulation=rep(NA, n)
+for(trial in 1:n){
   health=new_health()
   meta=new_meta()
   for(nth_round in 1:rounds) {
@@ -226,4 +225,28 @@ sd_weeks=apply(df,1,sd)
 sd_simulation=apply(df,2,sd)
 max_simulation=apply(df,2,max)
 min_simulation=apply(df,2,min)
+
+plot(mean_weeks, type="l") # line plot
+
+boxplot(t(df), # box plot
+        main = "Infected students over time: size 100 (10x10)", 
+        xlab = "Weeks", 
+        ylab = "Infected Students", 
+        col = "lightblue")
+
+# make a dataframe with max, min, mean
+values_df <- data.frame(Minimum = min_simulation, Mean = mean_simulation, Maximum = max_simulation)
+
+## plot it
+boxplot(values_df, 
+        main = "Variation for Classroom of Size 20x20", 
+        xlab = "Infected Values", 
+        ylab = "Number of Infected Individuals", 
+        col = "lightyellow", 
+        ylim = c(0,30),
+        cex.axis = 1.0, cex.lab = 1.0, cex.main = 2)
+axis(2, at = seq(0, 30, by = 5))
+
+
+
 
