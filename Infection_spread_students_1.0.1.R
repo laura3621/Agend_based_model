@@ -26,6 +26,7 @@ rm(list=ls())
 
 #### 0. Retrieve functions, set working directory
 setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
+setwd("~/Documents/GitHub/Agend_based_model") #Miriam
 rm(list=ls())
 
 source("get_transmissable_distance.R")
@@ -44,13 +45,16 @@ lectures_per_week <- 1 #per week
 weeks <- 30
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
+mean_stored <-  0
+weekday_mean <- 0
 
 # create metasheet
 meta=data.frame(
   infected = rep(NA, rounds),
   immunity = NA,
   recovering = NA,
-  sick_but_going = NA
+  sick_but_going = NA,
+  mean_stored = NA
 )
 
 
@@ -75,7 +79,12 @@ health <- data.frame(
   immunity = 0,
   sick_but_going = 0)
 
+r <- 0
+
+
 for(round in 1:rounds){
+  r <- r+1
+  
   #### 4. Randomly assign seats for attending students
   # 4a. get absent students
   ## making voluntary decision not to come..
@@ -121,7 +130,7 @@ for(round in 1:rounds){
   meta$infected[round] <- sum(health$infected_post)
   meta$immunity[round] <- sum(health$immunity)
   meta$recovering[round] <- length(which(health$missed_rounds>=1))
-  meta$sick_but_going[round] <- length(which(health$missed_rounds>=1))
+  meta$sick_but_going[round] <- length(which(health$sick_but_going>=1))
   
   #7b. update "health" dataframe
   quarantine <- which(health$sick_but_going==lectures_per_week)
@@ -146,12 +155,24 @@ for(round in 1:rounds){
   health$location <- 0
   health$p <- 0
   health$infected_post <- 0
+
+  
+  # 
+  if(13 >= r) {
+    meta$mean_stored <- meta$infected[round]
+  } #else {
+   # meta$mean_stored <- 0
+  #}
+  
   
   
   print(back_to_school)
   print(meta)
   
 }
+
+sum(meta$mean_stored)/weeks
+
 
 
 
