@@ -238,12 +238,12 @@ max_sd=apply(max_values_df, 1, sd)
 
 
 
-plot(means_byweek_df$X1, type = "l", col = "lightblue", xlab = "Index", ylab = "Values", main = "Plot of Three Columns")
-lines(means_byweek_df$X2, col = "lightgreen")
-lines(means_byweek_df$X3, col = "orange")
+plot(means_byweek_df$X1, type = "l", col = "lightblue", lwd = 3, xlab = "Index", ylab = "Values", main = "Plot of Three Columns")
+lines(means_byweek_df$X2, col = "lightgreen", lwd = 3)
+lines(means_byweek_df$X3, col = "#FFA07A", lwd = 3)
 
 # Add legend
-legend("topright", legend = c("10x10", "15x15", "20x20"), col = c("lightblue", "lightgreen", "orange"), lty = 1)
+legend("topright", legend = c("10x10", "15x15", "20x20"), col = c("lightblue", "lightgreen", "#FFA07A"), lwd = 3, lty = 1, title = "Classroom Size")
 
 # 
 # boxplot(max_values_df, 
