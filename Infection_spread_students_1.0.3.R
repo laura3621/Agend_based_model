@@ -219,7 +219,7 @@ starting_value <- 10000
 cost <- starting_value * log(classroom)
 
 ## Plot mean infected
-plot(x = classroom, y = max_means, type = 'l', col = 'violet', lwd = 2, ylab = 'Mean Infected', xlab = 'Classroom Size', xaxt = 'n')
+plot(x = classroom, y = max_means, type = 'l', col = 'violet', lwd = 2, ylab = 'Number of students infected', xlab = 'Classroom Size', xaxt = 'n')
 axis(1, at = classroom)
 
 ## Overlay log(Cost)
@@ -229,10 +229,10 @@ axis(4)
 mtext("Cost in CHF", side = 4, line = 2, col = "blue")
 
 ## Add legends
-legend("top", legend = c("Mean Infected", "Cost in CHF"), col = c("violet", "blue"), lty = 1, lwd = 2)
+legend("top", legend = c("Average max infected students", "Cost in CHF"), col = c("violet", "blue"), lty = 1, lwd = 2)
 
 ## Add a title
-title(main = "Plot of Mean Infected and Cost in CHF")
+title(main = "Plot of Mean Max Infected and Cost in CHF")
 
 # Boxplot for highest, lowest and mean value over the 13 weeks
 ## Make a dataframe with max, min, mean
