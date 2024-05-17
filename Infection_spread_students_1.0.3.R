@@ -1,5 +1,5 @@
 ####### Infection_spread_students_1.0.3.R
-#### update: commented up to ####7
+#### update: commented up to ####7 + fixed console spamming
 
 
 #### 0. Set working directory ####
@@ -73,7 +73,6 @@ one_round=function(nth_round, beta, students, transmission_dist,random_absence,l
   ## 1) assign students - who are not immune - who got infected outside of class by chance
   possible_hosts <- which(health$immunity == 0)
   infected_lastround <- which(health$infected_pre==1) # save students who got infected in class
-  print(infected_lastround)
   health$infected_pre[possible_hosts] <- sample(0:1, length(possible_hosts), replace = TRUE, prob=c(1-initial_prob,initial_prob))
   infected_random <- setdiff(which(health$infected_pre[possible_hosts] == 1), infected_lastround) # vector of students who got infected outside of class by chance
   health$immunity[which(health$infected_pre == 1)] <- 1 # students who are infected are immune
@@ -137,7 +136,6 @@ one_round=function(nth_round, beta, students, transmission_dist,random_absence,l
   
   return(list(health = health, meta = meta))
 }
-
 
 
 #### 5. Prepare - conditions(number of seats), number of simulations, dataframe to track results - to run the simulation ####
