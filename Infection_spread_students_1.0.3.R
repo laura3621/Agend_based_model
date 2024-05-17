@@ -244,11 +244,10 @@ boxplot(values_df,
         main = "Variation for Classroom of Size 20x20", 
         xlab = "Infected Values", 
         ylab = "Number of Infected Individuals", 
-        col = "lightyellow", #for other plots: lightblue, lightgreen
+        col = "#FFA07A", #for other plots: lightblue, lightgreen
         ylim = c(0,30),
         cex.axis = 1.0, cex.lab = 1.0, cex.main = 2) #adjust size of text
 axis(2, at = seq(0, 30, by = 5))
 ## Comment: This was adjusted manually for size 10x10, 15x15, and 20x20 as it was easier for as to do so than store informaion within a loop
-
 
 ##############
