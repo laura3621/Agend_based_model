@@ -7,16 +7,16 @@
 rm(list=ls())
 # setwd("~/UZH/Agent-based modelling in R/Agend_based_model") #Hyewon
 # setwd("~/Documents/GitHub/Agend_based_model") #Miriam
-setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/") #Laura
+# setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/") #Laura
 
 
 #### 1. Determine Parameters ####
 beta <- 0.3
 students <- 100
 transmission_dist <- 1.5 # in number of seats between students. dist 1 = one seat(60cm)
-random_absence <- 0.05
-lectures_per_week <- 1 #per week
-weeks <- 13 #fix in the end to 18 weeks -> one semester + study phase
+random_absence <- 0.05 # absence of student for reasons other than illness
+lectures_per_week <- 1 # per week
+weeks <- 13 # fix in the end to 18 weeks -> one semester + study phase
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
 
