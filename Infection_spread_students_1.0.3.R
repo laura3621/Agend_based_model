@@ -5,9 +5,9 @@
 #### 0. Set working directory ####
 # clear environment and set working directory
 rm(list=ls())
-setwd("~/UZH/Agent-based modelling in R/Agend_based_model") #Hyewon
+# setwd("~/UZH/Agent-based modelling in R/Agend_based_model") #Hyewon
 # setwd("~/Documents/GitHub/Agend_based_model") #Miriam
-# setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/") #Laura
+setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/") #Laura
 
 
 #### 1. Determine Parameters ####
@@ -32,7 +32,6 @@ new_meta=function(){
   )
   return(meta)
 }
-
 
 #### 3. Make a dataframe that contains student information. Will be renewed every week(round) ####
 new_health=function(){
@@ -139,7 +138,6 @@ one_round=function(nth_round, beta, students, transmission_dist,random_absence,l
 }
 
 
-
 #### 5. Prepare - conditions(number of seats), number of simulations, dataframe to track results - to run the simulation ####
 n=100 # number of simulations
 nrows <- ncols <- c(10:20) # conditions
@@ -202,45 +200,56 @@ max_sd=apply(max_values_df, 1, sd)
 
 
 #### 8. Plot results ####
+
+# Boxplot for each Classroom size and its highest number of infected students within the 13 weeks
 boxplot(max_values_df, 
-        main = "Boxplots for each Condition", 
+        main = "Boxplot for each Size Condition", 
         xlab = "Classroom Size", 
-        ylab = "Highest nr. of infected Individuals per Condition", 
-        col = "lightpink")
+        ylab = "Highest Number of infected Individuals within 13 Weeks", 
+        col = "#DDA0DD")
 
-
-# One plot for both curves
-# max_means and max_sd 
+# Plot the optimum of size and cost
+## max_means and max_sd 
 max_means <- colMeans(max_values_df)
 max_sd <- apply(max_values_df, 1, sd)
 
-# # Define cost based on classroom size
-# starting_value <- 10000
-# growth_rate <- 1.10
-# classroom <- 10:20
-# # Use growth rate
-# cost <- starting_value * growth_rate^(0:(length(classroom) - 1))
-
-# Define cost based on classroom size using a logarithmic scale
+## Define cost based on classroom size using a logarithmic scale
 classroom <- 10:20
 starting_value <- 10000
-# Use a logarithmic function to define the cost
+
+## Use a logarithmic function to define the cost
 cost <- starting_value * log(classroom)
 
-# Plot Mean Infected
+## Plot mean infected
 plot(x = classroom, y = max_means, type = 'l', col = 'violet', lwd = 2, ylab = 'Mean Infected', xlab = 'Classroom Size', xaxt = 'n')
 axis(1, at = classroom)
 
-# Overlay log(Cost)
+## Overlay log(Cost)
 par(new = TRUE)
 plot(x = classroom, y = cost, type = 'l', col = 'blue', lwd = 2, axes = FALSE, xlab = '', ylab = '')
 axis(4) 
 mtext("Cost in CHF", side = 4, line = 2, col = "blue")
 
-# Add legends
-legend("topright", legend = c("Mean Infected", "Cost in CHF"), col = c("violet", "blue"), lty = 1, lwd = 2)
+## Add legends
+legend("top", legend = c("Mean Infected", "Cost in CHF"), col = c("violet", "blue"), lty = 1, lwd = 2)
 
-# Add a title
+## Add a title
 title(main = "Plot of Mean Infected and Cost in CHF")
+
+# Boxplot for highest, lowest and mean value over the 13 weeks
+## Make a dataframe with max, min, mean
+values_df <- data.frame(Minimum = min_simulation, Mean = mean_simulation, Maximum = max_simulation)
+
+## Plot it
+boxplot(values_df, 
+        main = "Variation for Classroom of Size 20x20", 
+        xlab = "Infected Values", 
+        ylab = "Number of Infected Individuals", 
+        col = "lightyellow", #for other plots: lightblue, lightgreen
+        ylim = c(0,30),
+        cex.axis = 1.0, cex.lab = 1.0, cex.main = 2) #adjust size of text
+axis(2, at = seq(0, 30, by = 5))
+## Comment: This was adjusted manually for size 10x10, 15x15, and 20x20 as it was easier for as to do so than store informaion within a loop
+
 
 ##############
