@@ -1,7 +1,6 @@
 ####### Infection_spread_students_1.0.3.R
 #### update: commented up to ####7
 
-\
 
 #### 0. Set working directory ####
 # clear environment and set working directory
@@ -11,9 +10,7 @@ setwd("~/UZH/Agent-based modelling in R/Agend_based_model") #Hyewon
 # setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/") #Laura
 
 
-source("probability_to_binary.R")
-
-#### 1. Determine Parameters
+#### 1. Determine Parameters ####
 beta <- 0.3
 students <- 100
 transmission_dist <- 1.5 # in number of seats between students. dist 1 = one seat(60cm)
@@ -23,7 +20,7 @@ weeks <- 13 #fix in the end to 18 weeks -> one semester + study phase
 initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
 
-#### 2. Make a dataframe that monitors student status each week(round).
+#### 2. Make a dataframe that monitors student status each week(round) ####
 new_meta=function(){
   meta=data.frame(
     infected = rep(NA, rounds),
@@ -37,7 +34,7 @@ new_meta=function(){
 }
 
 
-#### 3. Make a dataframe that contains student information. Will be renewed every week(round).
+#### 3. Make a dataframe that contains student information. Will be renewed every week(round) ####
 new_health=function(){
   health <- data.frame(
     ID = 1:students,
@@ -56,7 +53,7 @@ new_health=function(){
 }
 
 
-#### 4. Get infection status for each week(round)
+#### 4. Get infection status for each week(round) ####
 one_round=function(nth_round, beta, students, transmission_dist,random_absence,lectures_per_week,weeks,initial_prob,rounds, meta, seats, health){
   # 4a. Randomly assign seats for attending students
   ## 1) check absence
@@ -143,13 +140,13 @@ one_round=function(nth_round, beta, students, transmission_dist,random_absence,l
 
 
 
-#### 5. Prepare - conditions(number of seats), number of simulations, dataframe to track results - to run the simulation
+#### 5. Prepare - conditions(number of seats), number of simulations, dataframe to track results - to run the simulation ####
 n=100 # number of simulations
 nrows <- ncols <- c(10:20) # conditions
 max_values_df= data.frame(matrix(NA, nrow = n, ncol = length(nrows))) # make empty dataframe that will store all peaks of infection for each condition
-colnames(max_values_df)=paste("size", 1:length(nrows)+9, sep="_")
+colnames(max_values_df) <- c("10x10", "11x11", "12x12", "13x13", "14x14", "15x15", "16x16", "17x17", "18x18", "19x19", "20x20")
 
-#### 6. Run simulations for each conditions
+#### 6. Run simulations for each conditions ####
 for(j in nrows) {
   # 6a. make a classroom with j rows of seats
   seats <- expand.grid(rows=1:j, cols=1:j) 
@@ -199,13 +196,12 @@ for(j in nrows) {
 }
 
 
-#### 7. Get means of maximum value
+#### 7. Get means of maximum value ####
 max_means=colMeans(max_values_df)
 max_sd=apply(max_values_df, 1, sd)
 
-# change the column names of max_values 
-colnames(max_values_df) <- c("10x10", "11x11", "12x12", "13x13", "14x14", "15x15", "16x16", "17x17", "18x18", "19x19", "20x20")
 
+#### 8. Plot results ####
 boxplot(max_values_df, 
         main = "Boxplots for each Condition", 
         xlab = "Classroom Size", 
