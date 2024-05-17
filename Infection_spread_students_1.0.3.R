@@ -1,7 +1,6 @@
 ####### Infection_spread_students_1.0.3.R
 #### update: commented up to ####7 + fixed console spamming
 
-
 #### 0. Set working directory ####
 # clear environment and set working directory
 rm(list=ls())
