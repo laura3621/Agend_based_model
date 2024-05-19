@@ -1,4 +1,4 @@
-####### Infection_spread_students_1.0.3.1.R  (line plot with 3 lines)
+####### Infection_spread_students_1.0.3.s.R  (line plot with 3 lines)
 
 rm(list=ls())
 
