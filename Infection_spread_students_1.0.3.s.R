@@ -6,8 +6,7 @@ rm(list=ls())
 setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
 rm(list=ls())
 
-source("get_transmissable_distance.R")
-source("probability_to_binary.R")
+
 
 #### 1. Determine Parameters
 beta <- 0.3
@@ -16,10 +15,7 @@ transmission_dist <- 1.5 #in number of seats between students
 random_absence <- 0.05
 lectures_per_week <- 1 #per week
 weeks <- 13 #fix in the end to 18 weeks -> one semester + study phase
-transmission_dist <- 2 #get_transmissable_distance(beta, threshold = 0.05) #dist 1 = one seat(60cm)
 random_absence <- 0.05
-lectures_per_week <- 1 #per week
-initial_prob <- 0.05
 rounds <- lectures_per_week*weeks
 mean_stored <-  0
 
@@ -93,11 +89,12 @@ one_round=function(nth_round, beta, students, transmission_dist,random_absence,l
   ### 6. From the probabilities, determine which student get infected
   for(i in 1:nrow(health)){
     if(health$immunity[i] == 1){
-      health$infected_post[i] == 0
+      health$infected_post[i] <- 0
     } else{
-      health$infected_post[i]<-probability_to_binary(health$p[i])
+      health$infected_post[i] <- sample(0:1, 1, prob = c(1-health$p[i],health$p[i]))
     }
   }
+  
   
   ### 7. Loop multiple times and track infection status each round
   # 7a. update infection status for each round in meta sheet
