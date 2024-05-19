@@ -5,7 +5,7 @@
 # clear environment and set working directory
 rm(list=ls())
 # setwd("~/UZH/Agent-based modelling in R/Agend_based_model") #Hyewon
-# setwd("~/Documents/GitHub/Agend_based_model") #Miriam
+setwd("~/Documents/GitHub/Agend_based_model") #Miriam
 # setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/") #Laura
 
 
@@ -202,7 +202,7 @@ max_sd=apply(max_values_df, 1, sd)
 # Boxplot for each Classroom size and its highest number of infected students within the 13 weeks
 boxplot(max_values_df, 
         main = "Boxplot for each Size Condition", 
-        xlab = "Classroom Size", 
+        xlab = "Number of Seats", 
         ylab = "Highest Number of infected Individuals within 13 Weeks", 
         col = "#DDA0DD")
 
@@ -218,20 +218,21 @@ starting_value <- 10000
 ## Use a logarithmic function to define the cost
 cost <- starting_value * log(classroom)
 
-## Plot mean infected
-plot(x = classroom, y = max_means, type = 'l', col = 'violet', lwd = 2, ylab = 'Number of students infected', xlab = 'Classroom Size', xaxt = 'n')
-axis(1, at = classroom)
+## Change labels of the classroom size
+classroom_labels <- paste0((classroom), "x", (classroom))
 
-## Overlay log(Cost)
+## Plot mean infected
+plot(x = classroom, y = max_means, type = 'l', col = 'violet', lwd = 2, ylab = 'Mean Students Infected', xlab = 'Number of Seats', xaxt = 'n')
+axis(1, at = classroom, labels = classroom_labels)
+
+## Overlay Plot log(Cost)
 par(new = TRUE)
 plot(x = classroom, y = cost, type = 'l', col = 'blue', lwd = 2, axes = FALSE, xlab = '', ylab = '')
 axis(4) 
 mtext("Cost in CHF", side = 4, line = 2, col = "blue")
 
-## Add legends
+## Add legends & title
 legend("top", legend = c("Average max infected students", "Cost in CHF"), col = c("violet", "blue"), lty = 1, lwd = 2)
-
-## Add a title
 title(main = "Plot of Mean Max Infected and Cost in CHF")
 
 # Boxplot for highest, lowest and mean value over the 13 weeks
