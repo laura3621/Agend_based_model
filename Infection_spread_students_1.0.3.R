@@ -250,4 +250,7 @@ boxplot(values_df,
 axis(2, at = seq(0, 30, by = 5))
 ## Comment: This was adjusted manually for size 10x10, 15x15, and 20x20 as it was easier for as to do so than store informaion within a loop
 
+# Code for plotting the mean number of infected students for each weeks were seperated in a supplementary file: 
+# https://github.com/laura3621/Agend_based_model/blob/main/Infection_spread_students_1.0.3.s.R
+
 ##############
