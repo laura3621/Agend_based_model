@@ -1,11 +1,12 @@
 ####### Infection_spread_students_1.0.3.R
-#### update: commented up to ####7 + fixed console spamming
+#### Miriam , Laura, Hyewon
+#### updated 19-05-2024: added supplementary, small changes in comments
 
 #### 0. Set working directory ####
 # clear environment and set working directory
 rm(list=ls())
-# setwd("~/UZH/Agent-based modelling in R/Agend_based_model") #Hyewon
-setwd("~/Documents/GitHub/Agend_based_model") #Miriam
+setwd("~/UZH/Agent-based modelling in R/Agend_based_model") #Hyewon
+#setwd("~/Documents/GitHub/Agend_based_model") #Miriam
 # setwd("C:/Users/Laura Andres/Documents/GitHub/Agend_based_model/") #Laura
 
 
@@ -232,7 +233,7 @@ axis(4)
 mtext("Cost in CHF", side = 4, line = 2, col = "blue")
 
 ## Add legends & title
-legend("top", legend = c("Average max infected students", "Cost in CHF"), col = c("violet", "blue"), lty = 1, lwd = 2)
+legend("topright", legend = c("Average max infected students", "Cost in CHF"), col = c("violet", "blue"), lty = 1, lwd = 2)
 title(main = "Plot of Mean Max Infected and Cost in CHF")
 
 # Boxplot for highest, lowest and mean value over the 13 weeks
