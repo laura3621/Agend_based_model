@@ -1,30 +1,6 @@
 ####### Infection_spread_students_1.0.3.1.R  (line plot with 3 lines)
-### 0. Retrieve functions
-### 1. Determine Parameters
-#### a. number of students
-#### b. number of seats and rows
-#### c. transmission rate
-#### d. recovery period
-#### e. random absence rate
-#### f. lectures per week
-#### g. probability of getting an infection without contact
-#### h. number of rounds
-### 2. Build a classroom and create "seat dataframe"
-### 3. Make a dataframe of students, contains health status and attendance of all students
-### 4. Randomly assign seats for attending students
-#### a. get attendance status for each students
-#### b. assign seats to attending students
-### 5. Calculate probability of infection for each students
-#### a. get students(who are not immune)who got infected outside of class
-#### b. calculate probability of infection for each students
-### 6. From the probabilities, determine which student get infected
-### 7. Loop multiple times and track infection status each round
-#### a. update infection status for each round in meta sheet (?)
-#### b. update "health" dataframe
 
 rm(list=ls())
-
-
 
 #### 0. Retrieve functions, set working directory
 setwd("~/UZH/Agent-based modelling in R/Agend_based_model")
